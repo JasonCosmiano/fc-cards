@@ -15,8 +15,30 @@ interface CardStats {
   physical: number;
 }
 
-const Card = () => {
+type CardProps = {
+  selectedLeague: string;
+  selectedClub: string;
+};
+
+const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
+
   const [stat, setStat] = useState<CardStats | null>(null);
+
+  const leagueImages: Record<string, string> = {
+    "LaLiga": "/leagues/LaLiga.png",
+    "Bundesliga": "/leagues/Bundesliga.webp",
+    "Ligue 1": "/leagues/Ligue 1.svg",
+    "Premier League": "/leagues/Premier League.png",
+    "Serie A": "/leagues/Serie A.png",
+  };
+
+  const leagueSizes: Record<string, string> = {
+    "LaLiga": "w-[30px] h-[30px]",
+    "Bundesliga": "w-[30px] h-[30px]",
+    "Ligue 1": "w-[25px] h-[43px]",
+    "Premier League": "w-[34px] h-[34px]",
+    "Serie A": "w-[25px] h-[43px]",
+  };
 
   const fetchStats = async () => {
     try {
@@ -111,9 +133,9 @@ const Card = () => {
               objectFit="cover"
             />
           </div>
-          <div className="relative w-[30px] h-[30px]">
+          <div className={`relative ${leagueSizes[selectedLeague] || "w-[30px] h-[30px]"}`}>
             <Image
-              src="/LaLiga.png"
+              src={leagueImages[selectedLeague] || "/leagues/LaLiga.png"}
               alt="league"
               fill
               objectFit="cover"
@@ -121,7 +143,7 @@ const Card = () => {
           </div>
           <div className="relative w-[30px] h-[30px]">
             <Image
-              src="/FC_Barcelona.png"
+              src="/laligaClubs/FC_Barcelona.png"
               alt="club"
               fill
               objectFit="cover"
