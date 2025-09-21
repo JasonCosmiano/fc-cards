@@ -18,11 +18,38 @@ interface CardStats {
 type CardProps = {
   selectedLeague: string;
   selectedClub: string;
+  selectedCountry: string;
 };
 
-const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
+const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub, selectedCountry }) => {
 
   const [stat, setStat] = useState<CardStats | null>(null);
+
+  const flagImages: Record<string, string> = {
+    "Argentina": "/flags/Argentina.png",
+    "Brazil": "/flags/Brazil.webp",
+    "England": "/flags/England.webp",
+    "France": "/flags/France.webp",
+    "Germany": "/flags/Germany.png",
+    "Italy": "/flags/Italy.webp",
+    "Netherlands": "/flags/Netherlands.webp",
+    "Philippines": "/flags/Philippines.webp",
+    "Portugal": "/flags/Portugal.webp",
+    "Spain": "/flags/Spain.webp",
+  };
+
+  const flagSizes: Record<string, string> = {
+    "Argentina": "w-[45px] h-[28px]",
+    "Brazil": "w-[45px] h-[28px]",
+    "England": "w-[45px] h-[28px]",
+    "France": "w-[45px] h-[28px]",
+    "Germany": "w-[45px] h-[28px]",
+    "Italy": "w-[45px] h-[28px]",
+    "Netherlands": "w-[45px] h-[28px]",
+    "Philippines": "w-[45px] h-[23px] mt-[2px]",
+    "Portugal": "w-[45px] h-[28px]",
+    "Spain": "w-[45px] h-[28px]",
+  };
 
   const leagueImages: Record<string, string> = {
     "LaLiga": "/leagues/LaLiga.png",
@@ -191,9 +218,9 @@ const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
 
         {/* Badges */}
         <div className="flex justify-start gap-2 px-40 mt-2">
-          <div className="relative w-[55px] h-[28px]">
+          <div className={`relative ${flagSizes[selectedCountry] || "w-[55px] h-[28px]"}`}>
             <Image
-              src="/Flag-Philippines.webp"
+              src={flagImages[selectedCountry] || "/clubs/icon_league.png"}
               alt="flag"
               fill
               objectFit="cover"
@@ -201,7 +228,7 @@ const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
           </div>
           <div className={`relative ${leagueSizes[selectedLeague] || "w-[30px] h-[30px]"}`}>
             <Image
-              src={leagueImages[selectedLeague] || "/leagues/LaLiga.png"}
+              src={leagueImages[selectedLeague] || "/clubs/icon_league.png"}
               alt="league"
               fill
               objectFit="cover"
@@ -209,7 +236,7 @@ const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
           </div>
           <div className={`relative ${clubSizes[selectedClub] || "w-[30px] h-[30px]"}`}>
             <Image
-              src={clubImages[selectedClub] || "/clubs/FC_Barcelona.png"} 
+              src={clubImages[selectedClub] || "/clubs/icon_league.png"} 
               alt="club"
               fill
               objectFit="cover"

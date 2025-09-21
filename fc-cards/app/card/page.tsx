@@ -3,6 +3,55 @@
 import React, { useState } from "react";
 import Card from "../components/card/card";
 
+const countries: string[] = [
+  "Argentina",
+  "Brazil",
+  "England",
+  "Germany",
+  "Italy",
+  "Netherlands",
+  "France",
+  "Spain",
+  "Portugal",
+  "Philippines",
+];
+
+interface CountrySelectorProps {
+  selectedCountry: string;
+  onChange: (league: string) => void;
+}
+
+const CountryDropdown: React.FC<CountrySelectorProps> = ({
+  selectedCountry,
+  onChange,
+}) => {
+
+
+  return (
+    <div className="flex flex-col gap-2 w-64">
+      <label htmlFor="country" className="text-sm font-medium text-gray-700">
+        Select Country
+      </label>
+      <select
+        id="country"
+        value={selectedCountry}
+        onChange={(e) => onChange(e.target.value)}
+        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="" disabled>
+          -- Choose a country --
+        </option>
+        {countries.map((country) => (
+          <option key={country} value={country}>
+            {country}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+
 const leagueToClubs: Record<string, string[]> = {
   "Premier League": [
     "Arsenal",
@@ -156,6 +205,7 @@ const PlayerAttributesForm: React.FC = () => {
 const CardPage: React.FC = () => {
   const [selectedLeague, setSelectedLeague] = useState("");
   const [selectedClub, setSelectedClub] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
 
   const handleLeagueChange = (league: string) => {
     setSelectedLeague(league);
@@ -166,12 +216,17 @@ const CardPage: React.FC = () => {
     setSelectedClub(club);
   };
 
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+  };
+
   return (
     <div>
       <div className="flex items-start gap-4">
         <Card 
           selectedLeague={selectedLeague}
           selectedClub={selectedClub}
+          selectedCountry={selectedCountry}
         />
 
         <PlayerAttributesForm />
@@ -186,6 +241,11 @@ const CardPage: React.FC = () => {
         selectedLeague={selectedLeague}
         selectedClub={selectedClub}
         onChange={handleClubChange}
+      />
+
+      <CountryDropdown
+        selectedCountry={selectedCountry}
+        onChange={handleCountryChange}
       />
     </div>
   );
