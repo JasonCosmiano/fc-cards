@@ -40,6 +40,72 @@ const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
     "Serie A": "w-[25px] h-[43px]",
   };
 
+    const clubSizes: Record<string, string> = {
+    "Arsenal": "w-[30px] h-[35px]",
+    "Chelsea": "w-[30px] h-[30px]",
+    "Liverpool": "w-[30px] h-[40px] -mt-[5px]",
+    "Manchester City": "w-[30px] h-[30px]",
+    "Manchester United": "w-[30px] h-[30px]",
+    "Tottenham Hotspur": "w-[15px] h-[30px]",
+    "Athletic Bilbao": "w-[30px] h-[35px]",
+    "Atlético Madrid": "w-[28px] h-[35px]",
+    "FC Barcelona": "w-[30px] h-[30px]",
+    "Real Betis": "w-[35px] h-[30px]",
+    "Real Madrid": "w-[30px] h-[40px] -mt-[5px]",
+    "Sevilla": "w-[30px] h-[37px] -mt-[5px]",
+    "Bayer Leverkusen": "w-[38px] h-[30px]",
+    "Bayern Munich": "w-[30px] h-[30px]",
+    "Borussia Dortmund": "w-[30px] h-[30px]",
+    "Eintracht Frankfurt": "w-[30px] h-[30px]",
+    "RB Leipzig": "w-[45px] h-[30px]",
+    "VfL Wolfsburg": "w-[30px] h-[30px]",
+    "Atalanta": "w-[25px] h-[40px] -mt-[3px]",
+    "Inter Milan": "w-[30px] h-[30px]",
+    "Juventus": "w-[21px] h-[33px]",
+    "AC Milan": "w-[19px] h-[30px]",
+    "Napoli": "w-[30px] h-[30px]",
+    "Roma": "w-[30px] h-[39px]",
+    "Lille": "w-[30px] h-[30px]",
+    "Lyon": "w-[30px] h-[35px]",
+    "Marseille": "w-[23px] h-[29px]",
+    "Monaco": "w-[20px] h-[35px]",
+    "Nice": "w-[28px] h-[35px]",
+    "Paris Saint-Germain": "w-[30px] h-[30px]",
+  };
+
+  const clubImages: Record<string, string> = {
+    "Arsenal": "/clubs/Arsenal_FC.png",
+    "Chelsea": "/clubs/Chelsea_FC.webp",
+    "Liverpool": "/clubs/Liverpool_FC.svg",
+    "Manchester City": "/clubs/Manchester_City_FC.png",
+    "Manchester United": "/clubs/Manchester_United_FC.png",
+    "Tottenham Hotspur": "/clubs/Tottenham_Hotspur.png",
+    "Athletic Bilbao": "/clubs/Athletic_Bilbao.png",
+    "Atlético Madrid": "/clubs/Atletico_Madrid.svg",
+    "FC Barcelona": "/clubs/FC_Barcelona.png",
+    "Real Betis": "/clubs/Real_betis.png",
+    "Real Madrid": "/clubs/Real_Madrid.webp",
+    "Sevilla": "/clubs/Sevilla_FC.png",
+    "Bayer Leverkusen": "/clubs/Bayer_04_Leverkusen.png",
+    "Bayern Munich": "/clubs/FC_Bayern_München.png",
+    "Borussia Dortmund": "/clubs/Borussia_Dortmund.png",
+    "Eintracht Frankfurt": "/clubs/Eintracht_Frankfurt.png",
+    "RB Leipzig": "/clubs/RB_Leipzig.png",
+    "VfL Wolfsburg": "/clubs/VfL_Wolfsburg.png",
+    "Atalanta": "/clubs/AtalantaBC.svg",
+    "Inter Milan": "/clubs/FC_Internazionale_Milano.png",
+    "Juventus": "/clubs/Juventus_FC.svg",
+    "AC Milan": "/clubs/AC_Milan.svg",
+    "Napoli": "/clubs/Napoli.svg",
+    "Roma": "/clubs/AS_Roma.png",
+    "Lille": "/clubs/Lille_OSC.png",
+    "Lyon": "/clubs/Olympique_Lyonnais.png",
+    "Marseille": "/clubs/Olympique_Marseille.png",
+    "Monaco": "/clubs/ASMonaco.svg",
+    "Nice": "/clubs/OGC_Nice.png",
+    "Paris Saint-Germain": "/clubs/Paris_Saint-Germain.webp",
+  };
+
   const fetchStats = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/stats', {
@@ -141,9 +207,9 @@ const Card : React.FC<CardProps> = ({ selectedLeague, selectedClub }) => {
               objectFit="cover"
             />
           </div>
-          <div className="relative w-[30px] h-[30px]">
+          <div className={`relative ${clubSizes[selectedClub] || "w-[30px] h-[30px]"}`}>
             <Image
-              src="/laligaClubs/FC_Barcelona.png"
+              src={clubImages[selectedClub] || "/clubs/FC_Barcelona.png"} 
               alt="club"
               fill
               objectFit="cover"
