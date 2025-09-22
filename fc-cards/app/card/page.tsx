@@ -169,36 +169,115 @@ const ClubSelector: React.FC<ClubSelectorProps> = ({
 // PlayerAttributesForm Component
 const PlayerAttributesForm: React.FC = () => {
   const inputs = [
-    { id: "name", label: "Name" },
-    { id: "rating", label: "Overall Rating" },
-    { id: "position", label: "Position" },
-    { id: "pace", label: "Pace" },
-    { id: "shooting", label: "Shooting" },
-    { id: "passing", label: "Passing" },
-    { id: "dribbling", label: "Dribbling" },
-    { id: "defending", label: "Defending" },
-    { id: "physicality", label: "Physicality" },
+    { id: "name", label: "Name", type: "text" },
+    { id: "rating", label: "Overall Rating", type: "number" },
+    { id: "position", label: "Position", type: "text" },
+    { id: "pace", label: "Pace", type: "number" },
+    { id: "shooting", label: "Shooting", type: "number" },
+    { id: "passing", label: "Passing", type: "number" },
+    { id: "dribbling", label: "Dribbling", type: "number" },
+    { id: "defending", label: "Defending", type: "number" },
+    { id: "physical", label: "Physical", type: "number" },
   ];
 
+  
+
+  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const {
+      name,
+      rating,
+      position,
+      pace,
+      shooting,
+      passing,
+      dribbling,
+      defending,
+      physical,
+    } = formData;
+
+    const payload = {
+      name,
+      rating,
+      position,
+      pace,
+      shooting,
+      passing,
+      dribbling,
+      defending,
+      physical, // rename here
+    };
+
+      const response = await fetch("http://localhost:3000/api/stats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to submit");
+      }
+
+      const data = await response.json();
+      setSuccess("Player saved successfully!");
+      console.log("API response:", data);
+
+      window.location.reload();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col w-full max-w-sm">
-      {inputs.map(({ id, label }) => (
+     <form
+      onSubmit={handleSubmit}
+      className="flex flex-col w-full max-w-sm p-4 border rounded-md shadow-md"
+    >
+      {inputs.map(({ id, label, type }) => (
         <React.Fragment key={id}>
-          <label
-            htmlFor={id}
-            className="block text-gray-700 font-medium mb-2"
-          >
+          <label htmlFor={id} className="text-gray-700 font-medium mb-1">
             {label}
           </label>
           <input
             id={id}
-            type="text"
-            placeholder="Enter something..."
-            className="relative z-10 border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+            type={type}
+            required
+            min={type === "number" ? 1 : undefined}
+            max={type === "number" ? 99 : undefined}
+            step={type === "number" ? 1 : undefined}
+            value={formData[id] || ""}
+            onChange={handleChange}
+            placeholder={`Enter ${label.toLowerCase()}...`}
+            className="mb-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </React.Fragment>
       ))}
-    </div>
+
+      <button
+        type="submit"
+        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+      >
+        Submit
+      </button>
+    </form>
   );
 };
 
